@@ -27,8 +27,12 @@ if __name__ == "__main__":
     MONGO_URI = 'mongodb://localhost:27017'
     connect('sivji-sandbox', host=MONGO_URI)
 
-    ## get distinct subreddits
-    for selected_sub in Post.objects().distinct('sub'):
+    ## get the last date the webscraper was run
+    for post in Post.objects().fields(date=1).order_by('-date').limit(1):
+        day_to_pull = post.date.date()
+
+    ## for each distinct subreddit in the last run, print top posts by sub
+    for selected_sub in Post.objects(date__gte=day_to_pull).distinct('sub'):
 
         # formatting
         print('=' * len(selected_sub))
@@ -36,6 +40,6 @@ if __name__ == "__main__":
         print('-' * len(selected_sub))
 
         # print each post
-        for post in Post.objects(sub=selected_sub):
+        for post in Post.objects(date__gte=day_to_pull, sub=selected_sub):
             print('{} - {}'.format(int(post.score), post.title))
         print()
