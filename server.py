@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from mongoengine.connection import connect, disconnect
 from mongoengine.document import Document
 from mongoengine.fields import DateTimeField, IntField, StringField, URLField
@@ -25,5 +27,15 @@ if __name__ == "__main__":
     MONGO_URI = 'mongodb://localhost:27017'
     connect('sivji-sandbox', host=MONGO_URI)
 
-    for post in Post.objects():
-        print('{} - {}'.format(int(post.score), post.title))
+    ## get distinct subreddits
+    for selected_sub in Post.objects().distinct('sub'):
+
+        # formatting
+        print('=' * len(selected_sub))
+        print(selected_sub)
+        print('-' * len(selected_sub))
+
+        # print each post
+        for post in Post.objects(sub=selected_sub):
+            print('{} - {}'.format(int(post.score), post.title))
+        print()
