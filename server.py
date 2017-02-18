@@ -4,7 +4,7 @@ import os
 from mongoengine.connection import connect
 from mongoengine.document import Document
 from mongoengine.fields import DateTimeField, IntField, StringField, URLField
-from jinja2 import Environment, FileSystemLoader
+import jinja2
 
 class Post(Document):
     ''' Class for defining structure of reddit-top-posts collection
@@ -22,16 +22,18 @@ class Post(Document):
         'auto_create_index': False, # MongoEngine will not create index
         }
 
-## jinja variables
-PATH = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE_ENVIRONMENT = Environment(
-    autoescape=False,
-    ## add template directory
-    loader=FileSystemLoader(os.path.join(PATH, '')),
-    trim_blocks=False)
+def render(tpl_path, context):
+    ''' Given jinja2 template, generate HTML
+    Adapted from http://matthiaseisen.com/pp/patterns/p0198/
 
-def render_template(template_filename, context):
-    return TEMPLATE_ENVIRONMENT.get_template(template_filename).render(context)
+    Args:
+        * tpl_path - template path
+        * context - dict of variables to pass in
+    '''
+    path, filename = os.path.split(tpl_path)
+    return jinja2.Environment(
+        loader=jinja2.FileSystemLoader(path or './')
+    ).get_template(filename).render(context)
 
 if __name__ == "__main__":
     # connect to db
@@ -42,14 +44,12 @@ if __name__ == "__main__":
     for post in Post.objects().fields(date=1).order_by('-date').limit(1):
         day_to_pull = post.date.date()
 
-    ## render template (set vars)
-    fname = "output.html"
+    ## pass in variables render template
     context = {
         'day_to_pull': day_to_pull,
         'Post': Post,
     }
 
-    ## render template (write file)
-    with open(fname, 'w') as f:
-        html = render_template('template.html', context)
+    with open("output1.html", 'w') as f:
+        html = render("template.html", context)
         f.write(html)
