@@ -3,3 +3,4 @@ sending-emails-from-mongodb-with-mongoengine-and-mailgun.md
 output.html
 *.ipynb
 settings.cfg
+*.pyc
