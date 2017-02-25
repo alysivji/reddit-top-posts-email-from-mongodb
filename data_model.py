@@ -9,6 +9,7 @@ class Post(Document):
     '''
     url = URLField(required=True)
     date = DateTimeField(required=True)
+    date_str = StringField(max_length=10, required=True)
     commentsUrl = URLField(required=True)
     sub = StringField(max_length=20, required=True) # subredit can be 20 chars
     title = StringField(max_length=300, required=True) # title can be 300 chars
