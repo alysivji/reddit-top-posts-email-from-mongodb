@@ -1,8 +1,6 @@
-"""Library for providing a simple API into data science tools
+#!/usr/bin/env python3
 
-Available functions:
-- calendar_plot_by_year
-- map_points
+"""Script to pull and email last Reddit scape from MongoDB
 """
 
 from top_post_emailer import email_last_scraped_date
