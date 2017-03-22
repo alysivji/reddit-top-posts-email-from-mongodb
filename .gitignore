@@ -1,6 +1,5 @@
 sending-html-emails-from-mongodb-with-rmongoengine-jinja2-requests.md
 .vscode/
-output.html
 *.ipynb
 settings.cfg
 *.pyc
