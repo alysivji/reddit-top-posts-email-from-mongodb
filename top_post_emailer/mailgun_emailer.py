@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import configparser
 import requests
 from requests.exceptions import HTTPError
@@ -15,7 +16,7 @@ def send_email(html):
     '''
     ## api params (using configparser)
     config = configparser.ConfigParser()
-    config.read('settings.cfg')
+    config.read(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'settings.cfg'))
     key = config.get('MailGun', 'api')
     domain = config.get('MailGun', 'domain')
 
